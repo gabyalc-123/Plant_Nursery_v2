@@ -1,0 +1,125 @@
+<!-- user/cart.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Cart</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .cart-item img {
+      height: 100px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-dark bg-success">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/user/dashboard">🌿 Plant Nursery</a>
+      <div class="d-flex">
+        <a href="/orders" class="btn btn-outline-light me-2">Orders</a>
+        <a href="/login" class="btn btn-outline-light">Logout</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container py-5">
+    <h2 class="mb-4">Your Cart</h2>
+    <div id="cartContainer" class="row g-4"></div>
+
+    <div class="text-end mt-4">
+      <h5>Total: ₹<span id="totalAmount">0</span></h5>
+      <button class="btn btn-success" onclick="submitOrder()">Place Order</button>
+    </div>
+  </div>
+
+  <footer class="text-center text-muted py-4 bg-light">
+    &copy; 2024 Online Plant Nursery. All rights reserved.
+  </footer>
+
+  <script>
+    async function loadCart() {
+      const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+      const res = await fetch('/get_products');
+      const products = await res.json();
+
+      let total = 0;
+      const container = document.getElementById('cartContainer');
+      container.innerHTML = '';
+
+      cart.forEach(item => {
+        const product = products.find(p => p.id === item.product_id);
+        if (!product) return;
+
+        total += product.price * item.quantity;
+
+        container.innerHTML += `
+          <div class="col-12">
+            <div class="card cart-item p-3 d-flex flex-row align-items-center">
+              <img src="/${product.image_url}" class="me-3" width="100">
+              <div class="flex-grow-1">
+                <h5 class="mb-1">${product.name}</h5>
+                <p class="mb-0">₹${product.price} ×
+                  <input type="number" value="${item.quantity}" min="1" class="form-control d-inline-block w-auto ms-2" onchange="updateQuantity(${product.id}, this.value)">
+                </p>
+              </div>
+              <button class="btn btn-danger" onclick="removeItem(${product.id})">Remove</button>
+            </div>
+          </div>
+        `;
+      });
+
+      document.getElementById('totalAmount').innerText = total;
+    }
+
+    function updateQuantity(productId, qty) {
+      const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+      const item = cart.find(i => i.product_id === productId);
+      if (item) {
+        item.quantity = parseInt(qty);
+        localStorage.setItem('cart', JSON.stringify(cart));
+        loadCart();
+      }
+    }
+
+    function removeItem(productId) {
+      let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+      cart = cart.filter(i => i.product_id !== productId);
+      localStorage.setItem('cart', JSON.stringify(cart));
+      loadCart();
+    }
+
+    async function submitOrder() {
+      const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+      if (cart.length === 0) return alert('Cart is empty!');
+
+      const userId = {{ session['user_id'] }};
+      const formData = new FormData();
+      formData.append('user_id', userId);
+      formData.append('items', JSON.stringify(cart));
+
+      try {
+        const res = await fetch('/place_order', {
+          method: 'POST',
+          body: formData
+        });
+        const result = await res.json();
+        if (res.ok) {
+          alert(result.message);
+          localStorage.removeItem('cart');
+          window.location.href = '/orders';
+        } else {
+          alert(result.error || 'Order failed');
+        }
+      } catch (err) {
+        console.error(err);
+        alert('Something went wrong');
+      }
+    }
+
+    window.onload = loadCart;
+  </script>
+</body>
+</html>
