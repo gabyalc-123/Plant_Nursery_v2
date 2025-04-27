@@ -1,22 +1,19 @@
 # Plant_Nursery_v2
 
-# ⛽ FuelNow – Online Fuel Ordering System
-
-FuelNow is a full-stack web application that allows customers to book fuel deliveries online and lets administrators manage orders, fuels, and users.
+#  Lucky Leaf Plant Nursery – Online ordering for native plants 
 
 ---
 
-## 🧠 Project Overview
+##  Project Overview
 
 This system provides a convenient way for users to:
 - Register and log in
-- Book different types of fuel (Petrol, Diesel)
-- Select quantity and delivery schedule
+- Select products and place order
 - Track order status
 
 Admins can:
-- Add, edit, or delete fuel entries
-- Manage fuel types and stock
+- Add, edit, or delete plant orders
+- Manage plant types and stock
 - View and manage all orders and users
 
 ---
@@ -25,8 +22,8 @@ Admins can:
 
 - **Backend**: Flask (Python)
 - **Database**: SQLite
-- **Frontend**: HTML, CSS, Bootstrap
-- **Tools**: PyCharm, DB Browser, GitHub
+- **Frontend**: HTML, CSS
+- **Tools**: PyCharm, Postman, GitHub
 
 ---
 
@@ -40,21 +37,11 @@ Admins can:
 - Cancel orders (if pending)
 
 ### 🧑‍💼 Admin
-- Dashboard with total stats
+- Dashboard with stats
 - Manage orders (cancel / mark delivered)
-- Add/update/delete fuels
-- Manage fuel types
+- Add/update/delete plant types
+- Manage plant types
 - View users
-
----
-
-## 🖼️ Screenshots
-
-| User Booking Page | Admin Dashboard |
-|-------------------|------------------|
-| ![Booking](uploads/booking.png) | ![Admin](uploads/admin_dashboard.png) |
-
-_(Replace with actual screenshots or links if needed)_
 
 ---
 
@@ -62,7 +49,7 @@ _(Replace with actual screenshots or links if needed)_
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/fuelnow.git
+   git clone https://github.com/yourusername/plant_nursery_v2.git
    cd fuelnow
    ```
 
@@ -119,9 +106,9 @@ This project followed the **Software Development Life Cycle (SDLC)**:
 
 ## 👤 Author
 
-- **Name**: [Your Name]
-- **College/Batch**: [Optional]
-- **Date**: [MM/DD/YYYY]
+- **Name**: [Gaby Alcala / Jordyn Binkley]
+- **College/Batch**: [UNT]
+- **Date**: [04/25/2027]
 
 ---
 
